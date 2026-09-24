@@ -51,6 +51,8 @@ const TARGETS: &[TargetSpec] = &[
         triple: "loongarch64-linux-gnu",
         qemu: "qemu-loongarch64",
     },
+    TargetSpec { machine: "bpf", triple: "bpfel", qemu: "" },
+    TargetSpec { machine: "bpfbe", triple: "bpfeb", qemu: "" },
 ];
 
 #[derive(Clone, Debug)]
@@ -237,6 +239,8 @@ fn canonical_machine(machine: &str) -> String {
         "powerpc" => "ppc".to_owned(),
         "powerpc64" => "ppc64".to_owned(),
         "powerpc64le" => "ppc64le".to_owned(),
+        "bpfel" => "bpf".to_owned(),
+        "bpfeb" => "bpfbe".to_owned(),
         _ => machine.to_owned(),
     }
 }
@@ -298,6 +302,15 @@ fn all_targets(native: &str) -> (Vec<Target>, Vec<&'static TargetSpec>) {
     for spec in TARGETS {
         if spec.machine == native {
             targets.push(Target::native(native.to_owned()));
+        } else if spec.machine == "bpf" || spec.machine == "bpfbe" {
+            // BPF programs are run by the kernel, not under a user-mode
+            // emulator, so only its target-specific tests can be run.
+            // They build objects with clang and inspect them with readelf.
+            if command_exists("clang") {
+                targets.push(Target::cross(spec.machine.to_owned(), spec.triple.to_owned()));
+            } else {
+                unavailable.push(spec);
+            }
         } else if command_exists(spec.qemu) && command_exists(&format!("{}-gcc", spec.triple)) {
             targets.push(Target::cross(spec.machine.to_owned(), spec.triple.to_owned()));
         } else {
@@ -340,6 +353,13 @@ fn selected_targets(options: &Options) -> (Vec<Target>, Vec<&'static TargetSpec>
 }
 
 fn matches_target(name: &str, machine: &str) -> bool {
+    // BPF programs run in the kernel, not under a user-mode emulator, so
+    // the generic tests, which execute the linked binary, cannot be run
+    // for it. Its target-specific tests build objects with clang instead
+    // of $CC and inspect them with readelf.
+    if machine == "bpf" || machine == "bpfbe" {
+        return name.starts_with(&format!("arch-{machine}-"));
+    }
     !name.starts_with("arch-") || name.starts_with(&format!("arch-{machine}-"))
 }
 
@@ -674,5 +694,12 @@ mod tests {
         assert!(matches_target("gc-sections", "aarch64"));
         assert!(matches_target("arch-aarch64-reloc", "aarch64"));
         assert!(!matches_target("arch-x86_64-reloc", "aarch64"));
+
+        // BPF has no user-mode emulator, so only its target-specific
+        // tests are run.
+        assert!(matches_target("arch-bpf-reloc", "bpf"));
+        assert!(matches_target("arch-bpfbe-reloc", "bpfbe"));
+        assert!(!matches_target("gc-sections", "bpf"));
+        assert!(!matches_target("arch-bpfbe-reloc", "bpf"));
     }
 }
