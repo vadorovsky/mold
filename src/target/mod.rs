@@ -9,6 +9,7 @@
 
 pub mod arm32;
 pub mod arm64;
+pub mod bpf;
 pub mod i386;
 pub mod loongarch;
 pub mod m68k;
@@ -23,6 +24,7 @@ pub mod x86_64;
 
 pub use arm32::{Arm32, Arm32Be};
 pub use arm64::{Arm64, Arm64Be};
+pub use bpf::{Bpf, BpfBe};
 pub use i386::I386;
 pub use loongarch::{LoongArch32, LoongArch64};
 pub use m68k::M68k;
@@ -61,6 +63,7 @@ pub enum Family {
     M68k,
     Sh4,
     LoongArch,
+    Bpf,
 }
 
 /// Sizes of range extension thunks, for targets whose branch instructions
@@ -346,6 +349,8 @@ pub fn emulation_to_target(emulation: &str) -> Option<&'static str> {
         "shelf" | "shelf_linux" => "sh4be",
         "elf64loongarch" => "loongarch64",
         "elf32loongarch" => "loongarch32",
+        "elf64bpfle" => "bpf",
+        "elf64bpfbe" => "bpfbe",
         _ => return None,
     })
 }

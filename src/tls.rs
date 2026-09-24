@@ -186,8 +186,9 @@ pub fn tp_addr<E: Target>(phdr: &ElfPhdr<E>) -> u64 {
         // RISC-V and LoongArch just uses the beginning of the main executable's
         // TLV block as TP. Their load/store instructions usually take 12-bits
         // signed immediates, so the beginning of the TLS block ± 2 KiB is
-        // accessible with a single load/store instruction.
-        Family::RiscV | Family::LoongArch => phdr.p_vaddr(),
+        // accessible with a single load/store instruction. BPF has no TLS at
+        // all; this arm exists only because the match is exhaustive.
+        Family::RiscV | Family::LoongArch | Family::Bpf => phdr.p_vaddr(),
     }
 }
 

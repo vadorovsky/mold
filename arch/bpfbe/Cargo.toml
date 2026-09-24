@@ -1,0 +1,12 @@
+[package]
+name = "mold-target-bpfbe"
+version.workspace = true
+edition.workspace = true
+description = "The mold linker instantiated for bpfbe"
+license.workspace = true
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+mold.workspace = true

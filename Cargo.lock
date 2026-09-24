@@ -261,6 +261,8 @@ dependencies = [
  "mold-target-arm32be",
  "mold-target-arm64",
  "mold-target-arm64be",
+ "mold-target-bpf",
+ "mold-target-bpfbe",
  "mold-target-i386",
  "mold-target-loongarch32",
  "mold-target-loongarch64",
@@ -303,6 +305,20 @@ dependencies = [
 
 [[package]]
 name = "mold-target-arm64be"
+version = "2.42.1"
+dependencies = [
+ "mold",
+]
+
+[[package]]
+name = "mold-target-bpf"
+version = "2.42.1"
+dependencies = [
+ "mold",
+]
+
+[[package]]
+name = "mold-target-bpfbe"
 version = "2.42.1"
 dependencies = [
  "mold",

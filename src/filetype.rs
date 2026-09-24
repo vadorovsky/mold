@@ -238,6 +238,8 @@ pub fn get_elf_target(data: &[u8]) -> Option<&'static str> {
         EM_SH => "sh4be",
         EM_LOONGARCH if is_64 => "loongarch64",
         EM_LOONGARCH => "loongarch32",
+        EM_BPF if is_le => "bpf",
+        EM_BPF => "bpfbe",
         _ => return None,
     };
     Some(name)

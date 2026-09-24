@@ -229,8 +229,8 @@ Options:
     -z notext
     -z textoff
 
-mold: supported targets: elf32-i386 elf64-x86-64 elf32-littlearm elf64-littleaarch64 elf64-bigaarch64 elf32-littleriscv elf32-bigriscv elf64-littleriscv elf64-bigriscv elf32-powerpc elf64-powerpc elf64-powerpc elf64-powerpcle elf64-s390 elf64-sparc elf32-m68k elf32-sh-linux elf64-loongarch elf32-loongarch
-mold: supported emulations: elf_i386 elf_x86_64 armelf_linux_eabi aarch64elf aarch64linux aarch64elfb aarch64linuxb elf32lriscv elf32briscv elf64lriscv elf64briscv elf32ppc elf32ppclinux elf64ppc elf64lppc elf64_s390 elf64_sparc m68kelf shlelf_linux shelf_linux elf64loongarch elf32loongarch";
+mold: supported targets: elf32-i386 elf64-x86-64 elf32-littlearm elf64-littleaarch64 elf64-bigaarch64 elf32-littleriscv elf32-bigriscv elf64-littleriscv elf64-bigriscv elf32-powerpc elf64-powerpc elf64-powerpc elf64-powerpcle elf64-s390 elf64-sparc elf32-m68k elf32-sh-linux elf64-loongarch elf32-loongarch elf64-bpfle elf64-bpfbe
+mold: supported emulations: elf_i386 elf_x86_64 armelf_linux_eabi aarch64elf aarch64linux aarch64elfb aarch64linuxb elf32lriscv elf32briscv elf64lriscv elf64briscv elf32ppc elf32ppclinux elf64ppc elf64lppc elf64_s390 elf64_sparc m68kelf shlelf_linux shelf_linux elf64loongarch elf32loongarch elf64bpfle elf64bpfbe";
 
 pub const VERSION: &str = env!("MOLD_VERSION");
 
@@ -1293,7 +1293,7 @@ pub fn parse_args(target: &TargetTraits, raw_cmdline: &[Cow<'_, OsStr>]) -> Pars
                  aarch64linux\n   aarch64elfb\n   aarch64linuxb\n   armelf_linux_eabi\n   elf64lriscv\n   \
                  elf64briscv\n   elf32lriscv\n   elf32briscv\n   elf32ppc\n   elf64ppc\n   elf64lppc\n   \
                  elf64_s390\n   elf64_sparc\n   m68kelf\n   shlelf_linux\n   shelf_linux\n   \
-                 elf64loongarch\n   elf32loongarch"
+                 elf64loongarch\n   elf32loongarch\n   elf64bpfle\n   elf64bpfbe"
             );
             version_shown = true;
         } else if read_arg!("mllvm", true) {

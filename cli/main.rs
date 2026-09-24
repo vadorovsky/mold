@@ -58,6 +58,10 @@ const TARGETS: &[(&str, LinkFn)] = &[
     ("loongarch64", mold_target_loongarch64::link),
     #[cfg(feature = "loongarch32")]
     ("loongarch32", mold_target_loongarch32::link),
+    #[cfg(feature = "bpf")]
+    ("bpf", mold_target_bpf::link),
+    #[cfg(feature = "bpfbe")]
+    ("bpfbe", mold_target_bpfbe::link),
 ];
 
 fn link_for_target(target: &str, cmdline: Arc<[Cow<'static, OsStr>]>) -> Result<i32, &'static str> {
